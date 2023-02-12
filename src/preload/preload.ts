@@ -11,8 +11,14 @@ export async function setupFiddleGlobal() {
     app: null as any, // will be set in main.tsx
     appPaths: await ipcRendererManager.invoke(IpcEvents.GET_APP_PATHS),
     arch: process.arch,
+    getKnownVersions: () =>
+      ipcRendererManager.invoke(IpcEvents.GET_KNOWN_VERSIONS),
+    getReleaseInfo: (version: string) =>
+      ipcRendererManager.invoke(IpcEvents.GET_RELEASE_INFO, version),
     monaco: null as any, // will be set in main.tsx
     platform: process.platform,
+    refreshKnownVersions: () =>
+      ipcRendererManager.invoke(IpcEvents.REFRESH_KNOWN_VERSIONS),
   };
 }
 

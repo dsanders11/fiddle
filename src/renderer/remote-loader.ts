@@ -142,7 +142,7 @@ export class RemoteLoader {
 
             if (
               !semver.valid(version) ||
-              !isReleasedMajor(semver.major(version))
+              !(await isReleasedMajor(semver.major(version)))
             ) {
               throw new Error(
                 "This gist's package.json contains an invalid Electron version.",

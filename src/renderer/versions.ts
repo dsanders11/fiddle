@@ -1,8 +1,7 @@
-import { InstallState, Installer } from '@electron/fiddle-core';
+import { InstallState, Installer, ReleaseInfo } from '@electron/fiddle-core';
 import * as fs from 'fs-extra';
 import semver from 'semver';
 
-import releasesJSON from '../../static/releases.json';
 import {
   ElectronReleaseChannel,
   RunnableVersion,
@@ -104,7 +103,7 @@ function getVersions(
 }
 
 /**
- * Save an array of GitHubVersions to localStorage.
+ * Save an array of Versions to localStorage.
  *
  * @param {VersionKeys} key
  * @param {Array<Version>} versions
@@ -147,10 +146,10 @@ export function makeRunnable(ver: Version): RunnableVersion {
 /**
  * Return both known as well as local versions.
  *
- * @returns {Array<RunnableVersion>}
+ * @returns {Promise<Array<RunnableVersion>>}
  */
-export function getElectronVersions(): Array<RunnableVersion> {
-  const versions = [...getReleasedVersions(), ...getLocalVersions()];
+export async function getElectronVersions(): Promise<Array<RunnableVersion>> {
+  const versions = [...(await getReleasedVersions()), ...getLocalVersions()];
   return versions.map((ver) => makeRunnable(ver));
 }
 
@@ -213,15 +212,14 @@ export function saveLocalVersions(versions: Array<Version | RunnableVersion>) {
 }
 
 /**
- * Retrieves our best guess regarding the latest Electron versions. Tries to
- * fetch them from localStorage, then from a static releases.json file.
+ * Retrieves our best guess regarding the latest Electron versions.
  *
  * @returns {Array<Version>}
  */
-function getReleasedVersions(): Array<Version> {
-  return getVersions(VersionKeys.known, () => {
-    return releasesJSON as Array<Version>;
-  });
+async function getReleasedVersions(): Promise<Array<Version>> {
+  return (await window.ElectronFiddle.getKnownVersions()).map((version) => ({
+    version,
+  }));
 }
 
 /**
@@ -233,18 +231,11 @@ function getReleasedVersions(): Array<Version> {
  * @param {number} major - Electron major version number
  * @returns {boolean} true if there are releases with that major version
  */
-export function isReleasedMajor(major: number) {
+export async function isReleasedMajor(major: number) {
   const prefix = `${major}.`;
-  return getReleasedVersions().some((ver) => ver.version.startsWith(prefix));
-}
-
-/**
- * Saves known versions to localStorage.
- *
- * @param {Array<Version>} versions
- */
-function saveKnownVersions(versions: Array<Version>) {
-  return saveVersions(VersionKeys.known, versions);
+  return (await getReleasedVersions()).some(({ version }) =>
+    version.startsWith(prefix),
+  );
 }
 
 /**
@@ -253,22 +244,11 @@ function saveKnownVersions(versions: Array<Version>) {
  * @returns {Promise<Version[]>}
  */
 export async function fetchVersions(): Promise<Version[]> {
-  const url = 'https://releases.electronjs.org/releases.json';
-  const response = await window.fetch(url, {
-    cache: 'no-store',
-  });
-  const data = (await response.json()) as { version: string }[];
+  const versions: Version[] = (
+    await window.ElectronFiddle.refreshKnownVersions()
+  ).map((version) => ({ version }));
 
-  const versions: Version[] = data
-    // Don't support anything older than 0.30 (Aug 2015).
-    // The oldest version known to releases.json.org is 0.20,
-    // Pre-0.24.0 versions were technically 'atom-shell' and cannot
-    // be downloaded with @electron/get.
-    .filter((ver) => !ver.version.startsWith('0.2'))
-    .map(({ version }) => ({ version }));
-
-  console.log(`Fetched ${versions.length} new Electron versions`);
-  if (versions.length > 0) saveKnownVersions(versions);
+  console.log(`Fetched ${versions.length} Electron versions`);
   return versions;
 }
 
@@ -311,13 +291,19 @@ function isElectronVersion(
   return (input as RunnableVersion).source !== undefined;
 }
 
-export function getOldestSupportedMajor(): number | undefined {
+export async function getOldestSupportedMajor(): Promise<number | undefined> {
   const NUM_BRANCHES = parseInt(process.env.NUM_STABLE_BRANCHES || '') || 4;
 
-  return getReleasedVersions()
+  return (await getReleasedVersions())
     .filter((ver) => ver.version.endsWith('.0.0'))
     .map((ver) => Number.parseInt(ver.version))
     .sort((a, b) => a - b)
     .slice(-NUM_BRANCHES)
     .shift();
+}
+
+export async function getReleaseInfo(
+  ver: Version,
+): Promise<ReleaseInfo | undefined> {
+  return window.ElectronFiddle.getReleaseInfo(ver.version);
 }

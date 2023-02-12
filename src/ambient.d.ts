@@ -1,3 +1,4 @@
+import { ReleaseInfo } from '@electron/fiddle-core';
 import * as MonacoType from 'monaco-editor';
 
 import { App } from './renderer/app';
@@ -8,8 +9,11 @@ declare global {
       app: App;
       appPaths: Record<string, string>;
       arch: string;
+      getKnownVersions: () => Promise<string[]>;
+      getReleaseInfo: (string) => Promise<ReleaseInfo | undefined>;
       monaco: typeof MonacoType;
       platform: string;
+      refreshKnownVersions: () => Promise<string[]>;
     };
   }
 }

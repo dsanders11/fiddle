@@ -193,7 +193,7 @@ describe('versions', () => {
   });
 
   describe('getOldestSupportedMajor()', () => {
-    it('uses localStorage versions if available', () => {
+    it('uses localStorage versions if available', async () => {
       // inject versions into localstorage
       (window as any).localStorage.getItem.mockReturnValueOnce(
         `[
@@ -204,54 +204,54 @@ describe('versions', () => {
           { "version": "6.0.0" }
         ]`,
       );
-      expect(getOldestSupportedMajor()).toEqual(7);
+      await expect(getOldestSupportedMajor()).resolve.toEqual(7);
     });
 
-    function getExpectedOldestSupportedVersion() {
-      const versions = getElectronVersions();
+    async function getExpectedOldestSupportedVersion() {
+      const versions = await getElectronVersions();
       const major = semver.parse(getDefaultVersion(versions))!.major;
       const NUM_BRANCHES = parseInt(process.env.NUM_STABLE_BRANCHES || '') || 4;
       return major + 1 - NUM_BRANCHES;
     }
 
-    it('falls back to a local require', () => {
+    it('falls back to a local require', async () => {
       (window as any).localStorage.getItem.mockReturnValueOnce('garbage');
 
-      const expected = getExpectedOldestSupportedVersion();
-      expect(getOldestSupportedMajor()).toBe(expected);
+      const expected = await getExpectedOldestSupportedVersion();
+      await expect(getOldestSupportedMajor()).resolves.toBe(expected);
     });
 
-    it('falls back to a local require', () => {
+    it('falls back to a local require', async () => {
       (window as any).localStorage.getItem.mockReturnValueOnce(
         `[{ "garbage": "true" }]`,
       );
 
-      const expected = getExpectedOldestSupportedVersion();
-      expect(getOldestSupportedMajor()).toBe(expected);
+      const expected = await getExpectedOldestSupportedVersion();
+      await expect(getOldestSupportedMajor()).resolves.toBe(expected);
     });
 
-    it('honors process.env.NUM_STABLE_BRANCHES', () => {
+    it('honors process.env.NUM_STABLE_BRANCHES', async () => {
       (window as any).localStorage.getItem.mockReturnValueOnce('garbage');
 
       process.env.NUM_STABLE_BRANCHES = '2';
-      const expected = getExpectedOldestSupportedVersion();
-      expect(getOldestSupportedMajor()).toBe(expected);
+      const expected = await getExpectedOldestSupportedVersion();
+      await expect(getOldestSupportedMajor()).resolves.toBe(expected);
     });
   });
 
-  describe('isReleasedMajor()', () => {
-    it('returns true for recognized releases', () => {
+  describe('isReleasedMajor()', async () => {
+    it('returns true for recognized releases', async () => {
       (window as any).localStorage.getItem.mockReturnValueOnce(
         `[{ "version": "3.0.5" }]`,
       );
-      expect(isReleasedMajor(3)).toBe(true);
+      await expect(isReleasedMajor(3)).resolves.toBe(true);
     });
 
-    it('returns false for unrecognized releases', () => {
+    it('returns false for unrecognized releases', async () => {
       (window as any).localStorage.getItem.mockReturnValueOnce(
         `[{ "version": "3.0.5" }]`,
       );
-      expect(isReleasedMajor(1000)).toBe(false);
+      await expect(isReleasedMajor(1000)).resolves.toBe(false);
     });
   });
 });

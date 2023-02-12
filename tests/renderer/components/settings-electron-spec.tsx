@@ -41,7 +41,7 @@ describe('ElectronSettings component', () => {
   it('renders', () => {
     const spy = jest
       .spyOn(versions, 'getOldestSupportedMajor')
-      .mockReturnValue(9);
+      .mockResolvedValue(9);
 
     const moreVersions: RunnableVersion[] = [
       {

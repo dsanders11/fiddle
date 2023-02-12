@@ -11,6 +11,7 @@ import { setupAboutPanel } from './about-panel';
 import { processCommandLine } from './command-line';
 import { setupDevTools } from './devtools';
 import { setupDialogs } from './dialogs';
+import { setupFiddleCore } from './fiddle-core';
 import { onFirstRunMaybe } from './first-run';
 import { ipcMainManager } from './ipc';
 import { listenForProtocolHandler, setupProtocolHandler } from './protocol';
@@ -42,6 +43,7 @@ export async function onReady() {
   setupDialogs();
   setupDevTools();
   setupTitleBarClickMac();
+  setupFiddleCore();
 
   processCommandLine(argv);
 }

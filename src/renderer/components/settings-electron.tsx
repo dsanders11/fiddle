@@ -53,7 +53,9 @@ export const ElectronSettings = observer(
       this.handleChannelChange = this.handleChannelChange.bind(this);
       this.handleDeleteAll = this.handleDeleteAll.bind(this);
       this.handleDownloadAll = this.handleDownloadAll.bind(this);
-      this.handleUpdateElectronVersions = this.handleUpdateElectronVersions.bind(this);
+      this.handleUpdateElectronVersions = this.handleUpdateElectronVersions.bind(
+        this,
+      );
       this.handleShowObsoleteChange = this.handleShowObsoleteChange.bind(this);
       this.handleStateChange = this.handleStateChange.bind(this);
 
@@ -262,7 +264,7 @@ export const ElectronSettings = observer(
             </Tooltip>
           ))}
           <Tooltip
-            content={`Include versions that have reached end-of-life (older than ${getOldestSupportedMajor()}.0.0)`}
+            content={`Include versions that have reached end-of-life (older than ${await getOldestSupportedMajor()}.0.0)`}
             position="bottom"
             intent="primary"
           >

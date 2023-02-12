@@ -39,6 +39,9 @@ export enum IpcEvents {
   TASK_DONE = 'TASK_DONE',
   OUTPUT_ENTRY = 'OUTPUT_ENTRY',
   RELOAD_WINDOW = 'RELOAD_WINDOW',
+  GET_KNOWN_VERSIONS = 'GET_KNOWN_VERSIONS',
+  REFRESH_KNOWN_VERSIONS = 'REFRESH_KNOWN_VERSIONS',
+  GET_RELEASE_INFO = 'GET_RELEASE_INFO',
 }
 
 export const ipcMainEvents = [
@@ -55,6 +58,9 @@ export const ipcMainEvents = [
   IpcEvents.OUTPUT_ENTRY,
   IpcEvents.TASK_DONE,
   IpcEvents.RELOAD_WINDOW,
+  IpcEvents.GET_KNOWN_VERSIONS,
+  IpcEvents.REFRESH_KNOWN_VERSIONS,
+  IpcEvents.GET_RELEASE_INFO,
 ];
 
 export const ipcRendererEvents = [

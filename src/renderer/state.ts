@@ -416,7 +416,7 @@ export class AppState {
       showUndownloadedVersions,
       versions,
     } = this;
-    const oldest = getOldestSupportedMajor();
+    const oldest = await getOldestSupportedMajor();
 
     const filter = (ver: RunnableVersion) =>
       ver &&
@@ -433,8 +433,8 @@ export class AppState {
   }
 
   /**
-   * Update the Electron versions: First, fetch them from GitHub,
-   * then update their respective downloaded state.
+   * Update the Electron versions, then update their respective
+   * downloaded state.
    *
    * Fails silently.
    */
@@ -532,9 +532,9 @@ export class AppState {
     window.ElectronFiddle.app.loadTheme(this.theme);
   }
 
-  public addLocalVersion(input: Version) {
+  public async addLocalVersion(input: Version) {
     addLocalVersion(input);
-    this.addNewVersions(getElectronVersions());
+    this.addNewVersions(await getElectronVersions());
   }
 
   public addNewVersions(versions: RunnableVersion[]) {

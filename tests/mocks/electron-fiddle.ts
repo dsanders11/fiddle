@@ -7,6 +7,7 @@ export class ElectronFiddleMock {
     home: `~`,
   };
   public arch = process.arch;
+  public getKnownVersions = jest.fn();
   public monaco = new MonacoMock();
   public platform = process.platform;
 }
