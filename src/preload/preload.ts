@@ -56,6 +56,18 @@ async function preload() {
 }
 
 export async function setupFiddleGlobal() {
+  // Forward the port along to the iframe
+  ipcRenderer.on('port', (e) => {
+    const port = e.ports[0];
+    // TODO - This needs to be delayed until iframe is rendered? Work out better system
+    setTimeout(() => {
+      const iframe = document?.getElementById(
+        'isolated-runner',
+      ) as HTMLIFrameElement;
+      iframe.contentWindow?.postMessage('main-process', '*', [port]);
+    }, 2000);
+  });
+
   contextBridge.exposeInMainWorld('ElectronFiddle', {
     addEventListener(
       type: FiddleEvent,

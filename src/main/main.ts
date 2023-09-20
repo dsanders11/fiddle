@@ -1,11 +1,17 @@
 // eslint-disable-next-line import/order
 import { initSentry } from './sentry';
 initSentry();
+
+import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
+
 import {
   BrowserWindow,
   IpcMainEvent,
   app,
   nativeTheme,
+  net,
+  protocol,
   systemPreferences,
 } from 'electron';
 
@@ -45,6 +51,21 @@ export async function onReady() {
 
   const { setupMenu } = await import('./menu');
   const { setupFileListeners } = await import('./files');
+
+  protocol.handle('electron-fiddle-privileged', (req) => {
+    const runnerPrefix = 'electron-fiddle-privileged://runner/';
+
+    if (req.url.startsWith(runnerPrefix)) {
+      const filePath = req.url.slice(runnerPrefix.length);
+      const absolutePath =
+        filePath === 'index.html'
+          ? path.join(__dirname, `../../.webpack/renderer/runner/index.html`)
+          : path.join(__dirname, `../../.webpack/renderer/${filePath}`);
+      return net.fetch(pathToFileURL(absolutePath).toString());
+    } else {
+      return new Response('Not Found', { status: 404 });
+    }
+  });
 
   setupShowWindow();
   setupMenu();

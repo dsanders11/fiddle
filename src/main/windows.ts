@@ -1,8 +1,9 @@
 import * as path from 'node:path';
 
-import { BrowserWindow, shell } from 'electron';
+import { BrowserWindow, MessageChannelMain, shell } from 'electron';
 
 import { createContextMenu } from './context-menu';
+import { startFiddle } from './fiddle-core';
 import { ipcMainManager } from './ipc';
 import { IpcEvents } from '../ipc-events';
 
@@ -106,6 +107,24 @@ export function createMainWindow(): Electron.BrowserWindow {
   });
 
   browserWindows.push(browserWindow);
+
+  const webContents = browserWindow.webContents;
+
+  // Send port along to the preload script
+  webContents.on('did-finish-load', () => {
+    const { port1, port2 } = new MessageChannelMain();
+    webContents.mainFrame.postMessage('port', null, [port1]);
+    port2.on('message', (event) => {
+      const [channel, ...args] = event.data;
+      if (channel === IpcEvents.START_FIDDLE) {
+        const params = args[0];
+        startFiddle(webContents, params);
+      }
+
+      // port2.postMessage({ type: 'response' });
+    });
+    port2.start();
+  });
 
   return browserWindow;
 }

@@ -71,3 +71,20 @@ body {
 .tabbing-hidden {
   visibility: hidden;
 }
+
+#isolated-runner {
+  border: 0;
+  width: 100px;
+  z-index: 5;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.4);
+  -webkit-app-region: no-drag;
+}
+
+// TODO - Need to forward focus from inside iframe
+#isolated-runner.focused {
+  outline:rgba(19, 124, 189, 0.6) auto 2px;
+  outline-offset:2px;
+  -moz-outline-radius:6px;
+}

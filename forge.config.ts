@@ -55,7 +55,7 @@ const config: ForgeConfig = {
       name: '@electron-forge/plugin-webpack',
       config: {
         devContentSecurityPolicy:
-          "default-src 'none'; img-src 'self' https: data:; media-src 'none'; child-src 'self'; object-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self' https:;",
+          "default-src 'none'; img-src 'self' https: data:; media-src 'none'; child-src 'self'; frame-src 'self' electron-fiddle-privileged:; object-src 'self'; script-src 'self' electron-fiddle-privileged:; style-src 'self' 'unsafe-inline' electron-fiddle-privileged:; connect-src 'self' https: electron-fiddle-privileged:; font-src 'self' https:;",
         devServer: {
           // Disallow browser from opening/reloading with HMR in development mode.
           open: false,
@@ -73,6 +73,11 @@ const config: ForgeConfig = {
               preload: {
                 js: path.join(root, 'src/preload/preload.ts'),
               },
+            },
+            {
+              html: path.join(root, './static/runner.html'),
+              js: path.join(root, './src/renderer/isolated-runner.ts'),
+              name: 'runner',
             },
           ],
         },
