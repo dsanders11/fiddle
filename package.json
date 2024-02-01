@@ -25,7 +25,7 @@
     "test:report": "jest --json --bail=false --outputFile=report.json | true",
     "tsc": "tsc --noEmit -p .",
     "electron-releases": "node --unhandled-rejections=strict -r ts-node/register ./tools/fetch-releases.ts",
-    "postinstall": "husky install && npm run electron-releases"
+    "postinstall": "husky install && npm run electron-releases && patch-package"
   },
   "keywords": [
     "Electron",
@@ -132,8 +132,10 @@
     "mini-css-extract-plugin": "^2.6.1",
     "monaco-editor-webpack-plugin": "2.1.0",
     "npm-run-all": "^4.1.5",
+    "patch-package": "^8.0.0",
     "postcss": "^8.4.25",
     "postcss-less": "^6.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.0.0",
     "recursive-readdir": "^2.2.2",
     "resolve-url-loader": "^5.0.0",
