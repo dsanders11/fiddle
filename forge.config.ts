@@ -146,6 +146,7 @@ const config: ForgeConfig = {
         },
         draft: true,
         prerelease: false,
+        generateReleaseNotes: true,
         force: true,
       },
     },
