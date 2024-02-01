@@ -28,6 +28,13 @@ commands:
       - store_test_results:
           path: ./reports/
 
+executors:
+  macos:
+    macos:
+      xcode: "14.3.1"
+
+    resource_class: macos.x86.medium.gen2
+
 jobs:
   lint:
     docker:
@@ -39,22 +46,10 @@ jobs:
     parameters:
       arch:
         type: enum
-        enum: [ 'x64', 'arm64' ]
-    executor: node/macos
+        enum: [ 'x64' ]
+    executor: macos
     steps:
-      - when:
-          condition:
-            equal: ['x64', << parameters.arch >>]
-          steps:
-            - node/install-rosetta
-            - install:
-                arch: 'x86_64'
-      - when:
-          condition:
-            not:
-              equal: ['x64', << parameters.arch >>]
-          steps:
-            - install
+      - install
       - test
   win-test:
     parameters:
@@ -78,23 +73,10 @@ jobs:
     parameters:
       arch:
         type: enum
-        enum: [ 'x64', 'arm64' ]
-    executor: node/macos
+        enum: [ 'x64' ]
+    executor: macos
     steps:
-      - when:
-          condition:
-            equal: ['x64', << parameters.arch >>]
-          steps:
-            - node/install-rosetta
-            - install:
-                arch: 'x86_64'
-      - when:
-          condition:
-            not:
-              equal: ['x64', << parameters.arch >>]
-          steps:
-            - install
-      - run: chmod +x tools/add-macos-cert.sh && . ./tools/add-macos-cert.sh
+      - install
       - run: npx yarn run publish --arch=<< parameters.arch >> --dry-run
       - store_artifacts:
           path: out
@@ -110,23 +92,6 @@ jobs:
     executor: node/windows
     steps:
       - install
-      - run:
-          name: Write authentication cert to disk
-          shell: powershell.exe
-          command: |
-            New-Item $Profile.CurrentUserAllHosts -Force
-            $SM_CLIENT_CERT_FILE=(Join-Path -Path (Resolve-Path .\).Path -ChildPath "cert.p12")
-            Add-Content -Path $Profile.CurrentUserAllHosts -Value "`$env:SM_CLIENT_CERT_FILE = '$SM_CLIENT_CERT_FILE'"
-            [IO.File]::WriteAllBytes($SM_CLIENT_CERT_FILE, [Convert]::FromBase64String($env:SM_CLIENT_CERT_P12_BASE64))
-      - run:
-          name: "Signing Manager Setup"
-          shell: powershell.exe
-          command: |
-            cd C:\
-            curl.exe -X GET  https://one.digicert.com/signingmanager/api-ui/v1/releases/smtools-windows-x64.msi/download -H "x-api-key:$env:SM_API_KEY" -o smtools-windows-x64.msi
-            msiexec.exe /i smtools-windows-x64.msi /quiet /qn | Wait-Process
-            & $env:SSM\smksp_registrar.exe list
-            & $env:SSM\smctl.exe windows certsync --keypair-alias=$env:KEYPAIR_ALIAS
       - run: 
           name: npx yarn run publish
           shell: powershell.exe
@@ -179,7 +144,7 @@ workflows:
       - mac-test:
           matrix:
             parameters:
-              arch: [ x64, arm64 ]
+              arch: [ x64 ]
       - win-test:
           matrix:
             parameters:
@@ -191,7 +156,7 @@ workflows:
       - mac-build:
           matrix:
             parameters:
-              arch: [ x64, arm64 ]
+              arch: [ x64 ]
           filters:
             tags:
               only: 
