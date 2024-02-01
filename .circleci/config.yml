@@ -17,7 +17,7 @@ commands:
           node-version: '18.17'
       - checkout
       - node/install-packages:
-          cache-version: v5
+          cache-version: v6
       - run: yarn run contributors
       - run: yarn run electron-releases
   test:
