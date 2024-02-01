@@ -23,8 +23,6 @@ const commonLinuxConfig = {
   mimeType: ['x-scheme-handler/electron-fiddle'],
 };
 
-const requirements = path.resolve(__dirname, 'tools/certs/requirements.txt');
-
 const config: ForgeConfig = {
   hooks: {
     generateAssets: async () => {
