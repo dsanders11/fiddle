@@ -16,7 +16,8 @@ commands:
           arch: << parameters.arch >>
           node-version: '18.17'
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          cache-version: v3
       - run: yarn run contributors
       - run: yarn run electron-releases
   test:
