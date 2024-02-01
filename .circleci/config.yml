@@ -19,10 +19,6 @@ commands:
       - node/install-packages
       - run: yarn run contributors
       - run: yarn run electron-releases
-  load-release-secrets:
-    steps:
-      - run: |
-          curl -X POST "$FIDDLE_SECRETS_SERVICE_ENDPOINT?format=shell" -H "Content-Type: application/json" -d '{"token":"'$CIRCLE_OIDC_TOKEN'"}' >> $BASH_ENV
   test:
     steps:
       - run:
@@ -174,29 +170,7 @@ jobs:
       - install
       - attach_workspace:
           at: .
-      - load-release-secrets
       - run: yarn run publish --from-dry-run
-  notify-sentry-deploy:
-    docker:
-      - image: cimg/base:stable
-    environment:
-      SENTRY_ORG: electronjs
-      SENTRY_PROJECT: electron-fiddle
-      SENTRY_ENVIRONMENT: production
-    steps:
-      - install
-      - attach_workspace:
-          at: .
-      - run:
-          name: Create release and notify Sentry of deploy
-          command: |
-            curl -sL https://sentry.io/get-cli/ | bash
-            export SENTRY_RELEASE=Electron-Fiddle@${CIRCLE_TAG:1}
-            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
-            sentry-cli releases set-commits $SENTRY_RELEASE --auto
-            sentry-cli releases files $SENTRY_RELEASE upload-sourcemaps --url-prefix=~/.webpack ./.webpack/
-            sentry-cli releases finalize $SENTRY_RELEASE
-            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
 
 workflows:
   build-and-test:
@@ -215,7 +189,6 @@ workflows:
             parameters:
               arch: [ x64 ]
       - mac-build:
-          context: fiddle-release
           matrix:
             parameters:
               arch: [ x64, arm64 ]
@@ -246,7 +219,6 @@ workflows:
             branches:
               ignore: /.*/
       - publish-to-github:
-          context: fiddle-release
           requires:
             - lint
             - mac-test
@@ -258,15 +230,6 @@ workflows:
           filters:
             tags:
               only: 
-                - /^v.*/
-            branches:
-              ignore: /.*/
-      - notify-sentry-deploy:
-          requires:
-            - publish-to-github
-          filters:
-            tags:
-              only:
                 - /^v.*/
             branches:
               ignore: /.*/

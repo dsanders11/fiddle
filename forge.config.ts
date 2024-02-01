@@ -96,19 +96,6 @@ const config: ForgeConfig = {
       CompanyName: 'Electron Community',
       OriginalFilename: 'Electron Fiddle',
     },
-    osxSign: {
-      identity:
-        'Developer ID Application: OpenJS Foundation, Inc. (UY52UFTVTM)',
-      optionsForFile: (filePath) =>
-        ['(Plugin).app', '(GPU).app', '(Renderer).app'].some((helper) =>
-          filePath.includes(helper),
-        )
-          ? { requirements }
-          : {
-              entitlements: 'static/entitlements.plist',
-              requirements,
-            },
-    },
   },
   makers: [
     {
@@ -124,7 +111,6 @@ const config: ForgeConfig = {
         noMsi: true,
         setupExe: `electron-fiddle-${version}-win32-${arch}-setup.exe`,
         setupIcon: path.resolve(iconDir, 'fiddle.ico'),
-        signWithParams: `/sha1 ${process.env.CERT_FINGERPRINT} /tr http://timestamp.digicert.com /td SHA256 /fd SHA256`,
       }),
     },
     {
@@ -166,33 +152,6 @@ const config: ForgeConfig = {
     },
   ],
 };
-
-function notarizeMaybe() {
-  if (process.platform !== 'darwin') {
-    return;
-  }
-
-  if (!process.env.CI && !process.env.FORCE_NOTARIZATION) {
-    // Not in CI, skipping notarization
-    console.log('Not in CI, skipping notarization');
-    return;
-  }
-
-  if (!process.env.APPLE_ID || !process.env.APPLE_ID_PASSWORD) {
-    console.warn(
-      'Should be notarizing, but environment variables APPLE_ID or APPLE_ID_PASSWORD are missing!',
-    );
-    return;
-  }
-
-  config.packagerConfig!.osxNotarize = {
-    appleId: process.env.APPLE_ID,
-    appleIdPassword: process.env.APPLE_ID_PASSWORD,
-    teamId: 'UY52UFTVTM',
-  };
-}
-
-notarizeMaybe();
 
 // Finally, export it
 export default config;
