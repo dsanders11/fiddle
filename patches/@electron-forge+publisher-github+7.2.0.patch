@@ -147,21 +147,8 @@ index 76d99cc..a9d9e1f 100644
 \ No newline at end of file
 +//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2l0aHViLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL3V0aWwvZ2l0aHViLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7O0FBQUEsZ0RBQXdCO0FBR3hCLHdEQUE4QztBQUM5Qyx3Q0FBd0M7QUFDeEMsa0RBQTBCO0FBRTFCLE1BQU0sT0FBTyxHQUFHLElBQUEsZUFBSyxFQUFDLHNDQUFzQyxDQUFDLENBQUM7QUFDOUQsTUFBTSxRQUFRLEdBQUcsSUFBQSxlQUFLLEVBQUMsdUNBQXVDLENBQUMsQ0FBQztBQUVoRSxNQUFxQixNQUFNO0lBS3pCLFlBQVksWUFBZ0MsU0FBUyxFQUFFLFdBQVcsR0FBRyxLQUFLLEVBQUUsVUFBMEIsRUFBRTtRQUN0RyxNQUFNLElBQUksR0FBRyxHQUFHLEVBQUU7WUFDaEIsZ0NBQWdDO1FBQ2xDLENBQUMsQ0FBQztRQUVGLElBQUksQ0FBQyxPQUFPLEdBQUc7WUFDYixHQUFHLE9BQU87WUFDVixHQUFHLEVBQUU7Z0JBQ0gsS0FBSyxFQUFFLFFBQVEsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsSUFBSTtnQkFDekMsS0FBSyxFQUFFLE9BQU8sQ0FBQyxLQUFLO2dCQUNwQixJQUFJLEVBQUUsT0FBTyxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxJQUFJO2dCQUN0QyxJQUFJLEVBQUUsT0FBTyxDQUFDLElBQUk7YUFDbkI7WUFDRCxTQUFTLEVBQUUsZ0JBQWdCO1NBQzVCLENBQUM7UUFFRixJQUFJLFNBQVMsRUFBRTtZQUNiLElBQUksQ0FBQyxLQUFLLEdBQUcsU0FBUyxDQUFDO1NBQ3hCO2FBQU0sSUFBSSxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRTtZQUNuQyxJQUFJLENBQUMsS0FBSyxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsWUFBWSxDQUFDO1NBQ3ZDO2FBQU0sSUFBSSxXQUFXLEVBQUU7WUFDdEIsTUFBTSxJQUFJLEtBQUssQ0FBQyxzRUFBc0UsQ0FBQyxDQUFDO1NBQ3pGO0lBQ0gsQ0FBQztJQUVELFNBQVM7UUFDUCxNQUFNLE9BQU8sR0FBbUIsRUFBRSxHQUFHLElBQUksQ0FBQyxPQUFPLEVBQUUsQ0FBQztRQUNwRCxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDZCxPQUFPLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQyxLQUFLLENBQUM7U0FDM0I7UUFDRCxNQUFNLGdCQUFnQixHQUFHLGNBQU8sQ0FBQyxNQUFNLENBQUMsb0JBQUssQ0FBQyxDQUFDO1FBQy9DLE1BQU0sTUFBTSxHQUFHLElBQUksZ0JBQWdCLENBQUMsT0FBTyxDQUFDLENBQUM7UUFDN0MsT0FBTyxNQUFNLENBQUM7SUFDaEIsQ0FBQztJQUVELDRHQUE0RztJQUM1RyxzR0FBc0c7SUFDdEcsTUFBTSxDQUFDLFlBQVksQ0FBQyxJQUFZO1FBQzlCLE9BQU8sY0FBSTthQUNSLFFBQVEsQ0FBQyxJQUFJLENBQUM7YUFDZCxPQUFPLENBQUMsTUFBTSxFQUFFLEdBQUcsQ0FBQzthQUNwQixPQUFPLENBQUMsTUFBTSxFQUFFLEVBQUUsQ0FBQzthQUNuQixPQUFPLENBQUMsTUFBTSxFQUFFLEVBQUUsQ0FBQzthQUNuQixPQUFPLENBQUMsYUFBYSxFQUFFLEdBQUcsQ0FBQyxDQUFDO0lBQ2pDLENBQUM7Q0FDRjtBQWxERCx5QkFrREMifQ==
 \ No newline at end of file
-diff --git a/node_modules/@electron-forge/publisher-github/src/Config.ts b/node_modules/@electron-forge/publisher-github/src/Config.ts
-index acd2b1e..35f504f 100644
---- a/node_modules/@electron-forge/publisher-github/src/Config.ts
-+++ b/node_modules/@electron-forge/publisher-github/src/Config.ts
-@@ -47,4 +47,8 @@ export interface PublisherGitHubConfig {
-    * Re-upload the new asset if you upload an asset with the same filename as existing asset
-    */
-   force?: boolean;
-+  /**
-+   * Whether to automatically generate release notes for the release
-+   */
-+  generateReleaseNotes?: boolean;
- }
 diff --git a/node_modules/@electron-forge/publisher-github/src/PublisherGithub.ts b/node_modules/@electron-forge/publisher-github/src/PublisherGithub.ts
-index 82249d8..aacd6bf 100644
+index 82249d8..bb38671 100644
 --- a/node_modules/@electron-forge/publisher-github/src/PublisherGithub.ts
 +++ b/node_modules/@electron-forge/publisher-github/src/PublisherGithub.ts
 @@ -1,7 +1,12 @@
@@ -177,15 +164,7 @@ index 82249d8..aacd6bf 100644
  import mime from 'mime-types';
  
  import { PublisherGitHubConfig } from './Config';
-@@ -74,6 +79,7 @@ export default class PublisherGithub extends PublisherBase<PublisherGitHubConfig
-               name: releaseName,
-               draft: config.draft !== false,
-               prerelease: config.prerelease === true,
-+              generate_release_notes: config.generateReleaseNotes === true,
-             })
-           ).data;
-         } else {
-@@ -96,9 +102,10 @@ export default class PublisherGithub extends PublisherBase<PublisherGitHubConfig
+@@ -96,9 +101,10 @@ export default class PublisherGithub extends PublisherBase<PublisherGitHubConfig
                uploaded += 1;
                updateUploadStatus();
              };
@@ -198,7 +177,7 @@ index 82249d8..aacd6bf 100644
              if (asset !== undefined) {
                if (config.force === true) {
                  await github.getGitHub().repos.deleteReleaseAsset({
-@@ -110,21 +117,36 @@ export default class PublisherGithub extends PublisherBase<PublisherGitHubConfig
+@@ -110,21 +116,36 @@ export default class PublisherGithub extends PublisherBase<PublisherGitHubConfig
                  return done();
                }
              }
@@ -251,14 +230,18 @@ index 82249d8..aacd6bf 100644
            })
        );
 diff --git a/node_modules/@electron-forge/publisher-github/src/util/github.ts b/node_modules/@electron-forge/publisher-github/src/util/github.ts
-index 6742462..2aa07fa 100644
+index 6742462..29a3c6c 100644
 --- a/node_modules/@electron-forge/publisher-github/src/util/github.ts
 +++ b/node_modules/@electron-forge/publisher-github/src/util/github.ts
-@@ -56,6 +56,6 @@ export default class GitHub {
+@@ -53,9 +53,9 @@ export default class GitHub {
+   static sanitizeName(name: string): string {
+     return path
+       .basename(name)
++      .replace(/[^\w.@+-]+/g, '.')
        .replace(/\.+/g, '.')
        .replace(/^\./g, '')
-       .replace(/\.$/g, '')
+-      .replace(/\.$/g, '')
 -      .replace(/[^\w.-]+/g, '-');
-+      .replace(/[^\w.-@+]+/g, '.');
++      .replace(/\.$/g, '');
    }
  }
