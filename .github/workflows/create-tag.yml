@@ -1,0 +1,35 @@
+name: Create Release Tag
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    name: Create tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create release tag
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const owner = 'dsanders11';
+            const repo = 'fiddle';
+            const ref = 'refs/tags/v0.100.0'
+            const sha = 'a0c7b57eae96c2fb090e27eccf37c9d6d64c4a45';
+
+            const tag = await github.rest.git.getRef({
+              owner,
+              repo,
+              ref: 'tags/v0.99.7',
+            });
+            console.log(tag);
+
+            await github.rest.git.createRef({
+              owner,
+              repo,
+              ref,
+              sha,
+            });
