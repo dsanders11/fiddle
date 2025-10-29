@@ -7,6 +7,7 @@ permissions: {}
 jobs:
   check-download-links:
     name: Check Download Links
+    environment: delayed
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
